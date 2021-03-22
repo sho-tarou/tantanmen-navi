@@ -12,12 +12,11 @@
             <ul class="navbar-nav">
                 {{-- 検索ページへのリンク --}}
                 <li class="nav-item nav-link"><a href="#">検索</a></li>
-                {{-- 投稿ページへのリンク --}}
-                <li class="nav-item nav-link"><a href="#">投稿</a></li>
-                
                 @if (Auth::check())
+                    {{-- 投稿ページへのリンク --}}
+                    <li class="nav-item nav-link"><a href="#">投稿</a></li>
                     {{-- マイページへのリンク --}}
-                    <li class="nav-item nav-link"><a href="#">マイページ</a></li>
+                    <li class="nav-item">{!! link_to_route('users.show', 'マイページ', ['user' => Auth::id()], ['class' => 'nav-link']) !!}</li>
                     {{-- ログアウトへのリンク --}}
                     <li class="nav-item">{!! link_to_route('logout.get', 'ログアウト', [], ['class' => 'nav-link']) !!}</li>
                 @else
