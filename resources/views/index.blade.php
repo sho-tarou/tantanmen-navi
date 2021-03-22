@@ -9,9 +9,11 @@
                 </div>
                 <div class="col-sm-6 text-center text-light">
                     <p>あなたイチ押しの担々麺を投稿しよう！</p>
+                    {{-- ログインページへのリンク --}}
                     <button class="btn btn-success btn-inline-block">ログイン</button>
                     <span>または</span>
-                    <button class="btn btn-success btn-inline-block">ユーザー登録</button>
+                    {{-- ユーザ登録ページへのリンク --}}
+                    {!! link_to_route('signup.get', 'ユーザー登録', [], ['class' => 'btn btn-success btn-inline-block']) !!}
                 </div>
             </div>
         </div>
