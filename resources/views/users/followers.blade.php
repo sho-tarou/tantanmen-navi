@@ -6,5 +6,7 @@
     @include('users.show_main')
     {{-- タブ --}}
     @include('users.navtabs')
+        {{-- ユーザ一覧 --}}
+        @include('users.users')
     
 @endsection
