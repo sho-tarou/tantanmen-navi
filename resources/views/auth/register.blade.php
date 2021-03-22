@@ -32,7 +32,7 @@
                 {!! Form::submit('登録する', ['class' => 'btn btn-success btn-block']) !!}
             {!! Form::close() !!}
             
-            <a href="#">ログインはこちらへ</a>
+            {!! link_to_route('login', 'ログインはこちらへ') !!}
         </div>
     </div>
 @endsection

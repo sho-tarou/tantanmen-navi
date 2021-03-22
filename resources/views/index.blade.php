@@ -9,11 +9,16 @@
                 </div>
                 <div class="col-sm-6 text-center text-light">
                     <p>あなたイチ押しの担々麺を投稿しよう！</p>
-                    {{-- ログインページへのリンク --}}
-                    <button class="btn btn-success btn-inline-block">ログイン</button>
-                    <span>または</span>
-                    {{-- ユーザ登録ページへのリンク --}}
-                    {!! link_to_route('signup.get', 'ユーザー登録', [], ['class' => 'btn btn-success btn-inline-block']) !!}
+                    @if (Auth::check())
+                        {{-- 投稿ページへのリンク --}}
+                        <li class="nav-item nav-link"><a href="#">投稿</a></li>
+                    @else
+                        {{-- ログインページへのリンク --}}
+                        {!! link_to_route('login', 'ログイン', [], ['class' => 'btn btn-success btn-inline-block']) !!}
+                        <span>または</span>
+                        {{-- ユーザ登録ページへのリンク --}}
+                        {!! link_to_route('signup.get', 'ユーザー登録', [], ['class' => 'btn btn-success btn-inline-block']) !!}
+                    @endif
                 </div>
             </div>
         </div>

@@ -10,14 +10,22 @@
         <div class="collapse navbar-collapse" id="nav-bar">
             <ul class="navbar-nav mr-auto"></ul>
             <ul class="navbar-nav">
-                    {{-- 検索ページへのリンク --}}
-                    <li class="nav-item nav-link"><a href="#">検索</a></li>
-                    {{-- 投稿ページへのリンク --}}
-                    <li class="nav-item nav-link"><a href="#">投稿</a></li>
-                    {{-- ユーザー登録ページへのリンク --}}
-                    <li class="nav-item nav-link"><a href="#">ユーザー登録</a></li>
+                {{-- 検索ページへのリンク --}}
+                <li class="nav-item nav-link"><a href="#">検索</a></li>
+                {{-- 投稿ページへのリンク --}}
+                <li class="nav-item nav-link"><a href="#">投稿</a></li>
+                
+                @if (Auth::check())
+                    {{-- マイページへのリンク --}}
+                    <li class="nav-item nav-link"><a href="#">マイページ</a></li>
+                    {{-- ログアウトへのリンク --}}
+                    <li class="nav-item">{!! link_to_route('logout.get', 'ログアウト', [], ['class' => 'nav-link']) !!}</li>
+                @else
+                    {{-- ユーザ登録ページへのリンク --}}
+                    <li class="nav-item">{!! link_to_route('signup.get', 'ユーザー登録', [], ['class' => 'nav-link']) !!}</li>
                     {{-- ログインページへのリンク --}}
-                    <li class="nav-item nav-link"><a href="#">ログイン</a></li>
+                    <li class="nav-item">{!! link_to_route('login', 'ログイン', [], ['class' => 'nav-link']) !!}</li>
+                @endif
             </ul>
         </div>
     </nav>

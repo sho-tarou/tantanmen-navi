@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-sm-6 offset-sm-3">
             
-            {!! Form::open(['' => '']) !!}
+            {!! Form::open(['route' => 'login.post']) !!}
                 <div class="form-group">
                     {!! Form::label('email', 'メールアドレス') !!}
                     {!! Form::email('email', old('email'), ['class' => 'form-control']) !!}
@@ -23,7 +23,7 @@
             {!! Form::close() !!}
             
             {{-- ユーザ登録ページへのリンク --}}
-            <a href="#">ユーザー登録はこちらへ</a>
+            {!! link_to_route('signup.get', 'ユーザー登録はこちらへ') !!}
         </div>
     </div>
 @endsection
