@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-sm-6 offset-sm-3">
             
-            {!! Form::open(['route' => 'signup.post']) !!}
+            {!! Form::open(['route' => 'signup.post', 'files' => true]) !!}
                 <div class="form-group">
                     {!! Form::label('name', 'お名前') !!}
                     {!! Form::text('name', old('name'), ['class' => 'form-control']) !!}
@@ -27,6 +27,11 @@
                 <div class="form-group">
                     {!! Form::label('password_confirmation', 'パスワード（確認用）') !!}
                     {!! Form::password('password_confirmation', ['class' => 'form-control']) !!}
+                </div>
+                
+                <div class="form-group">
+                    {!! Form::label('photo', '画像ファイル') !!}
+                    {!! Form::file('image', ['class' => 'form-control']) !!}
                 </div>
                 
                 {!! Form::submit('登録する', ['class' => 'btn btn-success btn-block']) !!}

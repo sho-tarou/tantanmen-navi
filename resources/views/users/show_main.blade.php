@@ -4,8 +4,8 @@
     <div class="col-sm-5">
         {{-- ユーザーの写真を表示 --}}
         <div style="padding: 100px; margin: 0px; border: 1px solid #333333;">
-            写真
-            <img class="mr-2 rounded" src="" alt="">
+            
+            <img class="mr-2 rounded" src="https://tantanmen-navi.s3-ap-northeast-1.amazonaws.com/{{ $user->image_url }}" alt="">
         </div>
         {{-- フォロー／アンフォローボタン --}}
         @include('user_follow.follow_button')
