@@ -14,25 +14,10 @@
                     {!! Form::text('name', old('name'), ['class' => 'form-control']) !!}
                 </div>
                 
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-secondary active">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked><i class="far fa-star"></i>
-                    </label>
-                    <label class="btn btn-secondary active">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked><i class="far fa-star"></i>
-                    </label>
-                    <label class="btn btn-secondary active">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked><i class="far fa-star"></i>
-                    </label>
-                    <label class="btn btn-secondary active">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked><i class="far fa-star"></i>
-                    </label>
-                    <label class="btn btn-secondary active">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked><i class="far fa-star"></i>
-                    </label>
+                <div class="form-group">
+                    {!! Form::label('satisfaction', '満足度') !!}
+                    {!! Form::text('satisfaction', old('satisfaction'), ['class' => 'kv-uni-star rating-loading', 'data-size' => 'xl']) !!}
                 </div>
-
-                
                 
                 <div class="form-group">
                     {!! Form::label('email', 'タグ') !!}
