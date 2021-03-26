@@ -78,4 +78,15 @@ class ReviewsController extends Controller
         // トップページへリダイレクトさせる
         return redirect('/');
     }
+    
+    public function show($id)
+    {
+        // idの値でレビューを検索して取得
+        $review = Review::findOrFail($id);
+        
+        // showビューでそれを表示
+        return view('reviews.show', [
+            'review' => $review,
+        ]);
+    }
 }

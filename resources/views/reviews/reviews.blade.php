@@ -12,8 +12,10 @@
                         {{-- デフォルト写真を表示 --}}
                         <img class="img-thumbnail img-fluid mx-auto d-block" src="{{ asset('/assets/images/profile_default_350px.png') }}" alt="tantanmen image">
                     @else
-                        {{-- 担々麺の写真を表示 --}}
-                        <img class="img-thumbnail img-fluid mx-auto d-block" src="https://tantanmen-navi.s3-ap-northeast-1.amazonaws.com/{{ $review->image_url }}" alt="tantanmen image">
+                        {{-- 担々麺の写真（リンク）を表示 --}}
+                        <a href="{{ route('reviews.show', $review->id) }}">
+                            <img class="img-thumbnail img-fluid mx-auto d-block" src="https://tantanmen-navi.s3-ap-northeast-1.amazonaws.com/{{ $review->image_url }}" alt="tantanmen image">
+                        </a>
                     @endif
                 </div>
                 <div>
