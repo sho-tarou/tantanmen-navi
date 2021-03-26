@@ -20,7 +20,12 @@
                 <tr>
                     <td width="20%">大阪府</td>
                     <td width="50%">～～～店</td>
-                    <td width="30%"><button class="btn btn-warning">レビュー入力画面へ</button></td>
+                    <td width="30%">
+                        @if (Auth::check())
+                            {{-- レビュー入力ページへのリンク --}}
+                            {!! link_to_route('reviews.create_form', 'このお店のレビューを入力する', [], ['class' => 'btn btn-warning btn-inline-block']) !!}
+                        @endif
+                    </td>
                 </tr>
             </tbody>
         </table>

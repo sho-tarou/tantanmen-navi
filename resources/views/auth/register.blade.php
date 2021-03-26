@@ -30,7 +30,7 @@
                 </div>
                 
                 <div class="form-group">
-                    {!! Form::label('photo', '画像ファイル') !!}
+                    {!! Form::label('image', '画像ファイル') !!}
                     {!! Form::file('image', ['class' => 'form-control']) !!}
                 </div>
                 

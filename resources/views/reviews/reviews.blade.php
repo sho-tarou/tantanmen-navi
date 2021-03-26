@@ -1,24 +1,28 @@
-@extends('layouts.app')
-
-@section('content')
-    <div>
-        <li>（ユーザー名）さん</li>
-        <li>（店名）</li>
-    </div>
-    <div class="row">
-        <div class="col-sm-5">
-            <div style="padding: 100px; margin: 0px; border: 1px solid #333333;">
-                写真
-                <img class="mr-2 rounded" src="" alt="">
-            </div>
-            <button class="btn btn-danger btn-block">お気に入りする</button>
-        </div>
-        <div class="col-sm-7">
-            <li>メニュー名</li>
-            <li>満足度</li>
-            <li>タグ</li>
-            <li>レビュー</li>
-        </div>
-    </div>
-    
-@endsection
+@if (count($reviews) > 0)
+    <ul class="list-unstyled">
+        @foreach ($reviews as $review)
+            <li>
+                <div>
+                    {{-- 投稿者のユーザ詳細ページへのリンク --}}
+                    {!! link_to_route('users.show', $review->user->name, ['user' => $review->user->id]) !!}
+                    <p>店名</p>
+                    
+                    {{-- 投稿写真を表示 --}}
+                    @if ($review->image_url == null)
+                        {{-- デフォルト写真を表示 --}}
+                        <img class="img-thumbnail img-fluid mx-auto d-block" src="{{ asset('/assets/images/profile_default_350px.png') }}" alt="tantanmen image">
+                    @else
+                        {{-- 担々麺の写真を表示 --}}
+                        <img class="img-thumbnail img-fluid mx-auto d-block" src="https://tantanmen-navi.s3-ap-northeast-1.amazonaws.com/{{ $review->image_url }}" alt="tantanmen image">
+                    @endif
+                </div>
+                <div>
+                    {{-- タグ --}}
+                    <p>tag</p>
+                </div>
+            </li>
+        @endforeach
+    </ul>
+    {{-- ページネーションのリンク --}}
+    {{ $reviews->links() }}
+@endif

@@ -116,6 +116,14 @@ class User extends Authenticatable
      */
     public function loadRelationshipCounts()
     {
-        $this->loadCount(['followings', 'followers']);
+        $this->loadCount(['followings', 'followers', 'reviews']);
+    }
+    
+    /**
+     * このユーザが所有する投稿。（ Reviewモデルとの関係を定義）
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }

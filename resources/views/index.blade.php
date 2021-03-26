@@ -11,7 +11,7 @@
                     <p>あなたイチ押しの担々麺を投稿しよう！</p>
                     @if (Auth::check())
                         {{-- 投稿ページへのリンク --}}
-                        <li class="nav-item nav-link"><a href="#">投稿</a></li>
+                        {!! link_to_route('reviews.create', 'レビューを投稿する', [], ['class' => 'btn btn-warning btn-inline-block']) !!}
                     @else
                         {{-- ユーザ登録ページへのリンク --}}
                         {!! link_to_route('signup.get', 'ユーザー登録', [], ['class' => 'btn btn-success btn-inline-block']) !!}
@@ -40,7 +40,8 @@
     <div>
         <p>新着レビュー</p>
         <div style="padding: 100px; margin: 0px; border: 1px solid #333333;">
-            ここにレビューを表示
+            {{-- 投稿一覧 --}}
+            @include('reviews.reviews')
         </div>
     </div>
     
