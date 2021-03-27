@@ -10,7 +10,9 @@
                     {{-- 投稿写真を表示 --}}
                     @if ($review->image_url == null)
                         {{-- デフォルト写真を表示 --}}
-                        <img class="img-thumbnail img-fluid mx-auto d-block" src="{{ asset('/assets/images/profile_default_350px.png') }}" alt="tantanmen image">
+                        <a href="{{ route('reviews.show', $review->id) }}">
+                            <img class="img-thumbnail img-fluid mx-auto d-block" src="{{ asset('/assets/images/profile_default_350px.png') }}" alt="tantanmen image">
+                        </a>
                     @else
                         {{-- 担々麺の写真（リンク）を表示 --}}
                         <a href="{{ route('reviews.show', $review->id) }}">

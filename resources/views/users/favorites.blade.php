@@ -8,4 +8,5 @@
     @include('users.navtabs')
         {{-- レビュー一覧 --}}
         @include('reviews.reviews')
+    
 @endsection

@@ -33,15 +33,21 @@ Route::group(['middleware' => ['auth']], function () {
     // レビューの投稿、編集、削除
     Route::resource('reviews', 'ReviewsController', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     Route::get('reviews.create_form', 'ReviewsController@create_form')->name('reviews.create_form');
+    // レビューのお気に入り追加、削除
+    Route::group(['prefix' => 'reviews/{id}'], function () {
+        Route::post('favorite', 'FavoriteController@store')->name('favorites.favorite');
+        Route::delete('unfavorite', 'FavoriteController@destroy')->name('favorites.unfavorite');
+    });
 });
 
 // ユーザーの詳細表示（誰でも）
 Route::resource('users', 'UsersController', ['only' => ['show']]);
 
-// ユーザーのフォロー、フォロワーの一覧表示（誰でも）
+// ユーザーのフォロー、フォロワー、お気に入りの一覧表示（誰でも）
 Route::group(['prefix' => 'users/{id}'], function () {
     Route::get('followings', 'UsersController@followings')->name('users.followings');
     Route::get('followers', 'UsersController@followers')->name('users.followers');
+    Route::get('favorites', 'UsersController@favorites')->name('users.favorites');
 });
 
 // レビューの一覧、詳細表示（誰でも）

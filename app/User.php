@@ -116,14 +116,76 @@ class User extends Authenticatable
      */
     public function loadRelationshipCounts()
     {
-        $this->loadCount(['followings', 'followers', 'reviews']);
+        $this->loadCount(['followings', 'followers', 'reviews', 'favorites']);
     }
     
     /**
-     * このユーザが所有する投稿。（ Reviewモデルとの関係を定義）
+     * このユーザが所有するレビュー。（ Reviewモデルとの関係を定義）
      */
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+    
+    /**
+     * このユーザがお気に入り中のレビュー。（ Reviewモデルとの関係を定義）
+     */
+    public function favorites()
+    {
+        return $this->belongsToMany(Review::class, 'favorites', 'user_id', 'review_id')->withTimestamps();
+    }
+    
+    /**
+     * $reviewIdで指定されたレビューをお気に入りに追加する。
+     *
+     * @param  int  $reviewId
+     * @return bool
+     */
+    public function favorite($reviewId)
+    {
+        // すでにお気に入りしているかの確認
+        $exist = $this->is_favoring($reviewId);
+
+        if ($exist) {
+            // すでにお気に入りしていれば何もしない
+            return false;
+        } else {
+            // 未お気に入りであれば追加する
+            $this->favorites()->attach($reviewId);
+            return true;
+        }
+    }
+
+    /**
+     * $reviewIdで指定されたレビューのお気に入りを外す。
+     *
+     * @param  int  $reviewId
+     * @return bool
+     */
+    public function unfavorite($reviewId)
+    {
+        // すでにお気に入りしているかの確認
+        $exist = $this->is_favoring($reviewId);
+
+        if ($exist) {
+            // すでにお気に入りしていれば外す
+            $this->favorites()->detach($reviewId);
+            return true;
+        } else {
+            // 未お気に入りであれば何もしない
+            return false;
+        }
+    }
+
+    /**
+     * 指定された $reviewIdのレビューをこのユーザがお気に入り中であるか調べる。お気に入り中ならtrueを返す。
+     *
+     * @param  int  $reviewId
+     * @return bool
+     */
+    public function is_favoring($reviewId)
+    {
+        // お気に入り中レビューの中に $reviewIdのものが存在するか
+        return $this->favorites()->where('review_id', $reviewId)->exists();
     }
 }

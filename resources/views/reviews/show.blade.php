@@ -18,8 +18,8 @@
                 {{-- 担々麺の写真を表示 --}}
                 <img class="img-thumbnail img-fluid mx-auto d-block" src="https://tantanmen-navi.s3-ap-northeast-1.amazonaws.com/{{ $review->image_url }}" alt="tantanmen image">
             @endif
-            
-            <button class="btn btn-danger btn-block">お気に入りする</button>
+            {{-- お気に入りボタン --}}
+            @include('favorite.favorite_button')
         </div>
         <div class="col-sm-7">
             <table class="table table-borderless">
