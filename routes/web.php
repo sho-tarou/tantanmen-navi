@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth']], function () {
 // ユーザーの詳細表示（誰でも）
 Route::resource('users', 'UsersController', ['only' => ['show']]);
 
-// ユーザーのフォロー、アンフォローの一覧表示（誰でも）
+// ユーザーのフォロー、フォロワーの一覧表示（誰でも）
 Route::group(['prefix' => 'users/{id}'], function () {
     Route::get('followings', 'UsersController@followings')->name('users.followings');
     Route::get('followers', 'UsersController@followers')->name('users.followers');
