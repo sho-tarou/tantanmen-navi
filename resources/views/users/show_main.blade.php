@@ -1,6 +1,6 @@
 <h3>{{ $user->name }}さん</h3>
     
-<div class="row  mb-3">
+<div class="row mb-5">
     <div class="col-sm-5">
         @if ($user->image_url == null)
             {{-- デフォルト写真を表示 --}}
@@ -15,9 +15,17 @@
     </div>
     
     <div class="col-sm-7">
-        @if (Auth::id() == $user->id)
-        {{-- 投稿ボタン --}}
-        <button class="btn btn-warning btn-block">新しいレビューを投稿する</button>
+        @if (Auth::check())
+            @if (Auth::id() == $user->id)
+                {{-- プロフィール編集ページへのリンク --}}
+                <div class="text-right">
+                    {!! link_to_route('users.edit', '登録情報を変更する', ['user' => $user->id], ['class' => 'text-muted']) !!}
+                </div>
+                {{-- 投稿ページへのリンク --}}
+                <div class="d-flex align-items-center justify-content-center h-100">
+                {!! link_to_route('reviews.create', 'レビューを投稿する', [], ['class' => 'btn btn-warning btn-inline-block']) !!}
+                </div>
+            @endif
         @endif
     </div>
 </div>

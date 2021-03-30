@@ -25,6 +25,8 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout.get');
 
 // 認証済みユーザーのみ
 Route::group(['middleware' => ['auth']], function () {
+    // ユーザー情報の編集、削除
+    Route::resource('users', 'UsersController', ['only' => ['edit', 'update', 'destroy']]);
     // ユーザーのフォロー、アンフォロー
     Route::group(['prefix' => 'users/{id}'], function () {
         Route::post('follow', 'UserFollowController@store')->name('user.follow');

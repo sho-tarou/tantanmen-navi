@@ -1,12 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-    <div>
-        <p>
-            {{-- 投稿者のユーザ詳細ページへのリンク --}}
-            {!! link_to_route('users.show', $review->user->name, ['user' => $review->user->id]) !!}
-        </p>
-        <p>（店名）</p>
+    <div class="row">
+        <div class="col-sm-9">
+            <p>
+                {{-- 投稿者のユーザ詳細ページへのリンク --}}
+                {!! link_to_route('users.show', $review->user->name, ['user' => $review->user->id]) !!}
+            </p>
+            <p>（店名）</p>
+        </div>
+        <div class="col-sm-3 text-right">
+            @if (Auth::check())
+                @if (Auth::id() == $review->user->id)
+                    {{-- 投稿編集ページへのリンク --}}
+                    {!! link_to_route('reviews.edit', 'この投稿を編集する', ['review' => $review->id], ['class' => 'text-muted']) !!}
+                @endif
+            @endif
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-5">

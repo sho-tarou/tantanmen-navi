@@ -44,6 +44,14 @@
             <div class="container">
                 {{-- エラーメッセージ --}}
                 @include('commons.error_messages')
+                {{-- ユーザー登録削除後のメッセージ --}}
+                @if(Session::has('deleted_user'))
+                    <p class="bg-danger">{{session('deleted_user')}}</p>
+                @endif
+                {{-- 投稿削除後のメッセージ --}}
+                @if(Session::has('deleted_review'))
+                    <p class="bg-danger">{{session('deleted_review')}}</p>
+                @endif
                 
                 @yield('content')
             </div>
