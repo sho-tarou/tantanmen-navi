@@ -33,8 +33,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('unfollow', 'UserFollowController@destroy')->name('user.unfollow');
     });
     // レビューの投稿、編集、削除
-    Route::resource('reviews', 'ReviewsController', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
-    Route::get('reviews.create_form', 'ReviewsController@create_form')->name('reviews.create_form');
+    Route::resource('reviews', 'ReviewsController', ['only' => [ 'store', 'edit', 'update', 'destroy']]);
+    Route::get('reviews.create', 'ReviewsController@create')->name('reviews.create');
+    Route::post('reviews.create_form', 'ReviewsController@create_form')->name('reviews.create_form');
+    // レビューのstoreアクションでバリデーションエラーとなった場合
+    Route::get('reviews.create_form', 'ReviewsController@create_form_error');
+    
     // レビューのお気に入り追加、削除
     Route::group(['prefix' => 'reviews/{id}'], function () {
         Route::post('favorite', 'FavoriteController@store')->name('favorites.favorite');
@@ -54,4 +58,8 @@ Route::group(['prefix' => 'users/{id}'], function () {
 
 // レビューの一覧、詳細表示（誰でも）
 Route::resource('reviews', 'ReviewsController', ['only' => ['index', 'show']]);
+// レビュー投稿前の店舗情報取得
+Route::post('reviews.create', 'ReviewsController@yahoo_api_search')->name('yahoo_api_search');
 
+// 店舗詳細画面
+Route::resource('shops', 'ShopsController', ['only' => ['show']]);

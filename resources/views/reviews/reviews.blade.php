@@ -1,12 +1,16 @@
 @if (count($reviews) > 0)
-    <ul class="list-unstyled">
+    <div class="row">
         @foreach ($reviews as $review)
-            <li>
+            <div  class="col-sm-6 col-lg-3">
                 <div>
-                    {{-- 投稿者のユーザ詳細ページへのリンク --}}
-                    {!! link_to_route('users.show', $review->user->name, ['user' => $review->user->id]) !!}
-                    <p>店名</p>
-                    
+                    <div>
+                        {{-- 投稿者のユーザ詳細ページへのリンク --}}
+                        {!! link_to_route('users.show', $review->user->name, ['user' => $review->user->id]) !!}
+                    </div>
+                    <div>
+                        {{-- この投稿の店舗詳細ページへのリンク --}}
+                        {!! link_to_route('shops.show', $review->shop->name, ['shop' => $review->shop->id]) !!}
+                    </div>
                     {{-- 投稿写真を表示 --}}
                     @if ($review->image_url == null)
                         {{-- デフォルト写真を表示 --}}
@@ -24,9 +28,9 @@
                     {{-- タグ --}}
                     <p>tag</p>
                 </div>
-            </li>
+            </div>
         @endforeach
-    </ul>
+    </div>
     {{-- ページネーションのリンク --}}
     {{ $reviews->links() }}
 @endif

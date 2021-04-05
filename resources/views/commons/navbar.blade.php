@@ -14,7 +14,7 @@
                 <li class="nav-item nav-link"><a href="#">検索</a></li>
                 @if (Auth::check())
                     {{-- 投稿ページへのリンク --}}
-                    <li class="nav-item nav-link"><a href="#">投稿</a></li>
+                    <li class="nav-item">{!! link_to_route('reviews.create', '投稿', [], ['class' => 'nav-link']) !!}</li>
                     {{-- マイページへのリンク --}}
                     <li class="nav-item">{!! link_to_route('users.show', 'マイページ', ['user' => Auth::id()], ['class' => 'nav-link']) !!}</li>
                     {{-- ログアウトへのリンク --}}

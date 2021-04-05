@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Review; // 追加
+use App\Shop; // 追加
 use Illuminate\Support\Facades\Storage;  //追記
 use Intervention\Image\Facades\Image;  //追記
 use Illuminate\Http\File; //追記
@@ -39,26 +40,127 @@ class ReviewsController extends Controller
     
     public function create()
     {
+        $shops = array();
+        $key_pref = null;
+        $keyword = null;
+        $pref_index = config('pref_index');
+        
         // createビューを表示
-        return view('reviews.create');
+        return view('reviews.create')->with([
+            'shops' => $shops,
+            'key_pref' => $key_pref,
+            'keyword' => $keyword,
+            'pref_index' => $pref_index,
+        ]);
     }
     
-    public function create_form()
+    public function yahoo_api_search(Request $request)
     {
+        $shops = array();
+        $key_pref =null;
+        $keyword =null;
+        $pref_index = config('pref_index');
+        
+        if($request->key_pref || $request->keyword) {
+            // 検索条件
+            $params = array(
+                'appid' => config('services.yahoo_api.key'),
+                'output' => 'json',
+                'results' => '20', // 取得件数
+                'sort' => 'match',
+                'gc' => '0104,0106', // 業種コード
+                'ac' => $request->key_pref, // 都道府県コード
+                'query' => $request->keyword, // 検索ワード
+            );
+            
+            // 検索条件からurlを生成し、jsonファイルを受け取る
+            $url = 'https://map.yahooapis.jp/search/local/V1/localSearch?' . http_build_query($params);
+            $json = file_get_contents($url);
+            // 受け取ったjsonファイルをUTF8にエンコードし配列にする
+            $json = mb_convert_encoding($json, 'UTF8', 'ASCII,JIS,UTF-8,EUC-JP,SJIS-WIN');
+            $response = json_decode($json, true);
+            
+            if (empty($response)) {
+                return; // データがない時の処理
+            }else{
+                // 存在しているときの処理
+                
+                $data_length = $response['ResultInfo']['Count'];
+                for ($i=0; $i<$data_length; $i++){
+                    $shops[$i] = [
+                        // isset()と三項演算子を使用して、各項目が未定義だった場合は''を取得させる
+                        'name' => isset($response['Feature'][$i]['Name']) ? $response['Feature'][$i]['Name'] : '',
+                        'yahoo_api_id' => isset($response['Feature'][$i]['Property']['Uid']) ? $response['Feature'][$i]['Property']['Uid'] : '',
+                        'yomi' => isset($response['Feature'][$i]['Property']['Yomi']) ? $response['Feature'][$i]['Property']['Yomi'] : '',
+                        'address' => isset($response['Feature'][$i]['Property']['Address']) ? $response['Feature'][$i]['Property']['Address'] : '',
+                        'address_code' => isset($response['Feature'][$i]['Property']['GovernmentCode']) ? $response['Feature'][$i]['Property']['GovernmentCode'] : '',
+                        'station1' => isset($response['Feature'][$i]['Property']['Station']['Name'][0]) ? $response['Feature'][$i]['Property']['Station']['Name'][0] : '',
+                        'railway1' => isset($response['Feature'][$i]['Property']['Station']['Railway'][0]) ? $response['Feature'][$i]['Property']['Station']['Railway'][0] : '',
+                        'walking_time1' => isset($response['Feature'][$i]['Property']['Station']['Time'][0]) ? $response['Feature'][$i]['Property']['Station']['Time'][0] : '',
+                        'station2' => isset($response['Feature'][$i]['Property']['Station']['Name'][1]) ? $response['Feature'][$i]['Property']['Station']['Name'][1] : '',
+                        'railway2' => isset($response['Feature'][$i]['Property']['Station']['Railway'][1]) ? $response['Feature'][$i]['Property']['Station']['Railway'][1] : '',
+                        'walking_time2' => isset($response['Feature'][$i]['Property']['Station']['Time'][1]) ? $response['Feature'][$i]['Property']['Station']['Time'][1] : '',
+                        'station3' => isset($response['Feature'][$i]['Property']['Station']['Name'][2]) ? $response['Feature'][$i]['Property']['Station']['Name'][2] : '',
+                        'railway3' => isset($response['Feature'][$i]['Property']['Station']['Railway'][2]) ? $response['Feature'][$i]['Property']['Station']['Railway'][2] : '',
+                        'walking_time3' => isset($response['Feature'][$i]['Property']['Station']['Time'][2]) ? $response['Feature'][$i]['Property']['Station']['Time'][2] : '',
+                        'parking' => isset($response['Feature'][$i]['Property']['ParkingFlag']) ? $response['Feature'][$i]['Property']['ParkingFlag'] : '',
+                        'tel' => isset($response['Feature'][$i]['Property']['Tel1']) ? $response['Feature'][$i]['Property']['Tel1'] : '',
+                        'pc_url' => isset($response['Feature'][$i]['Property']['Detail']['PcUrl1']) ? $response['Feature'][$i]['Property']['Detail']['PcUrl1'] : '',
+                    ];
+                    // address_codeの頭2桁をキーとして、$pref_index配列から都道府県を取得して表示
+                    $shops[$i]['prefecture'] = isset($shops[$i]['address_code']) ? $pref_index[substr($shops[$i]['address_code'], 0, 2)] : '';
+                }
+            }
+        }
+        
+        return view('reviews.create')->with([
+            'shops' => $shops,
+            'key_pref' => $request->key_pref,
+            'keyword' => $request->keyword,
+            'pref_index' => $pref_index,
+        ]);
+    }
+    
+    public function create_form(Request $request)
+    {
+        // バリデーション
+        $request->validate([
+            // 店舗情報
+            'name' => 'required|string|max:255',
+            'yahoo_api_id' => 'nullable|string|max:255',
+            'yomi' => 'nullable|string|max:255',
+            'address' => 'required|string|max:255',
+            'prefecture' => 'required|string|max:255',
+            'station1' => 'nullable|string|max:255',
+            'railway1' => 'nullable|string|max:255',
+            'walking_time1' => 'nullable|numeric',
+            'station2' => 'nullable|string|max:255',
+            'railway2' => 'nullable|string|max:255',
+            'walking_time2' => 'nullable|numeric',
+            'station3' => 'nullable|string|max:255',
+            'railway3' => 'nullable|string|max:255',
+            'walking_time3' => 'nullable|numeric',
+            'parking' => 'nullable|string|max:255',
+            'tel' => 'nullable|string|max:255',
+            'pc_url' => 'nullable|string|max:255',
+        ]);
+        
         // create_formビューを表示
-        return view('reviews.create_form');
+        return view('reviews.create_form')->with([
+            'shop' => $_POST,
+        ]);
     }
     
     public function store(Request $request)
     {
-        // バリデーション
         $request->validate([
+            // レビュー内容
             'menu' => 'required|string|max:255',
-            'satisfaction' => 'required|numeric',
+            'satisfaction' => 'nullable',
             'image' => 'required|file|image|mimes:jpeg,png|max:1024',
             'content' => 'required|string|max:3000',
         ]);
-
+        
         if ($request->image) {
             // 一時ファイル（$tmpFile）を生成し、そのパス（$tmpPath）を取得
             $now = date_format(Carbon::now(), 'YmdHis');
@@ -79,16 +181,52 @@ class ReviewsController extends Controller
             Storage::disk('local')->delete('tmp/' . $tmpFile);
         }
         
+        $shop = Shop::updateOrCreate(['yahoo_api_id' => $request->yahoo_api_id],[
+            'name' => $request->name,
+            'yahoo_api_id' => $request->yahoo_api_id,
+            'yomi' => $request->yomi,
+            'address' => $request->address,
+            'prefecture' => $request->prefecture,
+            'station1' => $request->station1,
+            'railway1' => $request->railway1,
+            'walking_time1' => $request->walking_time1,
+            'station2' => $request->station2,
+            'railway2' => $request->railway2,
+            'walking_time2' => $request->walking_time2,
+            'station3' => $request->station3,
+            'railway3' => $request->railway3,
+            'walking_time3' => $request->walking_time3,
+            'parking' => $request->parking,
+            'tel' => $request->tel,
+            'pc_url' => $request->pc_url, 
+        ]);
+
         // 認証済みユーザ（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
         $request->user()->reviews()->create([
             'menu' => $request->menu,
             'satisfaction' => $request->satisfaction,
             'content' => $request->content,
             'image_url' => $path,
+            'shop_id' => $shop->id,
         ]);
 
         // トップページへリダイレクトさせる
         return redirect('/');
+    }
+    
+    public function create_form_error(Request $request)
+    {
+        // storeアクションでバリデーションエラーとなった場合のアクション
+        
+        // 前画面でのhidden項目を含めた入力情報をセッションとして次々リクエストまで保持
+        $request->session()->keep(['_old_input']);
+        // セッションを読み込む
+        $data = $request->session()->get('_old_input');
+        
+        // create_formビューを表示
+        return view('reviews.create_form')->with([
+            'shop' => $data,
+        ]);
     }
     
     public function edit($id)

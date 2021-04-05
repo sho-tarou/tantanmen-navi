@@ -8,7 +8,20 @@
     <div class="row mb-4">
         <div class="col-sm-10 offset-sm-1">
             
-            {!! Form::open(['route' => 'reviews.store', 'files' => true]) !!}
+            {!! Form::open(['route' => 'reviews.store', 'files' => true, 'method' => 'post']) !!}
+                @csrf
+                <div class="form-group">
+                    {{-- 各shop中の渡したい項目の数だけhiddenインプット要素を生成 --}}
+                    @foreach($shop as $key => $value)
+                        {!! Form::hidden($key, $value) !!}
+                    @endforeach
+                </div>
+                
+                <div class="form-group">
+                    {!! Form::label('name', '店名') !!}
+                    {!! Form::text('name', $shop['name'], ['class' => 'form-control', 'readonly']) !!}
+                </div>
+                
                 <div class="form-group">
                     {!! Form::label('menu', 'メニュー名') !!}
                     {!! Form::text('menu', old('menu'), ['class' => 'form-control']) !!}

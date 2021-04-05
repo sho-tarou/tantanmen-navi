@@ -39,7 +39,7 @@
     
     <div>
         <p>新着レビュー</p>
-        <div style="padding: 100px; margin: 0px; border: 1px solid #333333;">
+        <div style="margin: 0px; border: 1px solid #333333;">
             {{-- 投稿一覧 --}}
             @include('reviews.reviews')
         </div>

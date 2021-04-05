@@ -30,4 +30,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'yahoo_api' => [
+        'key'=>env('YAHOO_API_KEY'),
+        'secret'=>env('YAHOO_API_SECRET'),
+    ],
 ];

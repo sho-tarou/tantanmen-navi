@@ -3,11 +3,14 @@
 @section('content')
     <div class="row">
         <div class="col-sm-9">
-            <p>
+            <div>
                 {{-- 投稿者のユーザ詳細ページへのリンク --}}
                 {!! link_to_route('users.show', $review->user->name, ['user' => $review->user->id]) !!}
-            </p>
-            <p>（店名）</p>
+            </div>
+            <div>
+                {{-- この投稿の店舗詳細ページへのリンク --}}
+                {!! link_to_route('shops.show', $review->shop->name, ['shop' => $review->shop->id]) !!}
+            </div>
         </div>
         <div class="col-sm-3 text-right">
             @if (Auth::check())
