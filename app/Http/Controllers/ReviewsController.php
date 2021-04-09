@@ -18,9 +18,17 @@ class ReviewsController extends Controller
         $data = [];
         // 全投稿の一覧を作成日時の降順で取得
         $reviews = Review::orderBy('created_at', 'desc')->paginate(10);
-
+        $pref_index = config('pref_index');
+        $keyword = null;
+        $shop_pref = null;
+        $shop_name = null;
+        
         $data = [
             'reviews' => $reviews,
+            'pref_index' => $pref_index,
+            'keyword' => $keyword,
+            'shop_pref' => $shop_pref,
+            'shop_name' => $shop_name,
         ];
         
         // indexビューでそれらを表示
@@ -298,5 +306,33 @@ class ReviewsController extends Controller
  
         Session::flash('deleted_review', 'レビューが削除されました。');
         return redirect()->route('users.show', ['user' => $review->user->id]);
+    }
+    
+    public function search(Request $request)
+    {
+        // 都道府県コードを日本語に変換
+        $pref_index = config('pref_index');
+        $prefecture = $pref_index[$request->shop_pref];
+        
+        // Shopモデルにて都道府県と店名で店舗を絞り込んでモデルを取得し、idカラムを配列で抜き出す
+        $shop_ids = Shop::search($request, $prefecture)->pluck('id');
+        
+        // Reviewモデルにてキーワードと店舗idでレビューを絞り込んでモデルを取得
+        $reviews = Review::search($request, $shop_ids)->orderBy('created_at', 'desc')->paginate(10);
+        
+        // keywordを配列からスペース区切りの文字列に戻す
+        if($request->keyword) {
+            $keyword = implode( "　", $request->keyword);
+        }else{
+            $keyword = $request->keyword;
+        }
+        
+        return view('search.search')->with([
+            'reviews' => $reviews,
+            'pref_index' => $pref_index,
+            'keyword' => $keyword,
+            'shop_pref' => $request->shop_pref,
+            'shop_name' => $request->shop_name,
+        ]);
     }
 }

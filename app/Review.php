@@ -34,4 +34,33 @@ class Review extends Model
         return $this->belongsTo(Shop::class);
     }
     
+    /**
+     * 絞り込み・キーワード検索
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+     public function scopeSearch($query, $request, $shop_ids)
+    {
+        $prefecture = $request->input('prefecture');
+        $keywords = $request->input('keyword');
+        
+        // 店舗情報による絞り込み
+        if ($prefecture != '全国' && !empty($shop_ids)) {
+            $query->whereIn('shop_id', $shop_ids);
+        }
+        
+        // キーワード検索
+        if (!empty($keywords)) {
+            foreach ($keywords as $keyword) {
+                $query->where(function($query) use($keyword){
+                    $query->Where('menu', 'like', '%' . $keyword . '%')
+                        ->orWhere('content', 'like', '%' . $keyword . '%');
+                });
+            }
+        }
+        
+        return $query;
+    }
+    
 }

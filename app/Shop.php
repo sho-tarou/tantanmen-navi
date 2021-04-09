@@ -25,4 +25,30 @@ class Shop extends Model
     {
         $this->loadCount('reviews');
     }
+    
+    /**
+     * 絞り込み・キーワード検索
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+     public function scopeSearch($query, $request, $prefecture)
+    {
+        $shop_name = $request->input('shop_name');
+        
+        // 都道府県絞り込み
+        if ($prefecture != '全国') {
+            $query->where('prefecture', $prefecture);
+        }
+        
+        // キーワードで絞り込み
+        if(!empty($shop_name)) {
+            $query->where(function ($query) use ($shop_name) {
+                $query->where('name', 'like', '%' . $shop_name . '%')
+                    ->orWhere('yomi', 'like', '%' . $shop_name . '%');
+            });
+        }
+        
+        return $query;
+    }
 }

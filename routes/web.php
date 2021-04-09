@@ -63,3 +63,6 @@ Route::post('reviews.create', 'ReviewsController@yahoo_api_search')->name('yahoo
 
 // 店舗詳細画面
 Route::resource('shops', 'ShopsController', ['only' => ['show']]);
+
+// レビュー検索画面
+Route::get('search.serach', 'ReviewsController@search')->middleware('keyword')->name('search.search');

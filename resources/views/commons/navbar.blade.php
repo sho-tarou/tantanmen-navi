@@ -11,7 +11,7 @@
             <ul class="navbar-nav mr-auto"></ul>
             <ul class="navbar-nav">
                 {{-- 検索ページへのリンク --}}
-                <li class="nav-item nav-link"><a href="#">検索</a></li>
+                <li class="nav-item">{!! link_to_route('search.search', '検索', [], ['class' => 'nav-link']) !!}</li>
                 @if (Auth::check())
                     {{-- 投稿ページへのリンク --}}
                     <li class="nav-item">{!! link_to_route('reviews.create', '投稿', [], ['class' => 'nav-link']) !!}</li>
