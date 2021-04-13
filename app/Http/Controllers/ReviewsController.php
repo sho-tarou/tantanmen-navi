@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Review; // 追加
 use App\Shop; // 追加
+use App\Tag; // 追加
 use Illuminate\Support\Facades\Storage;  //追記
 use Intervention\Image\Facades\Image;  //追記
 use Illuminate\Http\File; //追記
@@ -18,6 +19,10 @@ class ReviewsController extends Controller
         $data = [];
         // 全投稿の一覧を作成日時の降順で取得
         $reviews = Review::orderBy('created_at', 'desc')->paginate(10);
+        foreach($reviews as $review){
+            $review->tags = $review->tags()->get();
+        }
+        
         $pref_index = config('pref_index');
         $keyword = null;
         $shop_pref = null;
@@ -40,9 +45,13 @@ class ReviewsController extends Controller
         // idの値でレビューを検索して取得
         $review = Review::findOrFail($id);
         
+        // タグを取得
+        $tags = $review->tags()->get();
+        
         // showビューでそれを表示
         return view('reviews.show', [
             'review' => $review,
+            'tags' => $tags,
         ]);
     }
     
@@ -153,9 +162,12 @@ class ReviewsController extends Controller
             'pc_url' => 'nullable|string|max:255',
         ]);
         
+        $all_tags = Tag::all();
+        
         // create_formビューを表示
         return view('reviews.create_form')->with([
             'shop' => $_POST,
+            'all_tags' => $all_tags,
         ]);
     }
     
@@ -165,6 +177,7 @@ class ReviewsController extends Controller
             // レビュー内容
             'menu' => 'required|string|max:255',
             'satisfaction' => 'nullable',
+            'tags' => 'array',
             'image' => 'required|file|image|mimes:jpeg,png|max:1024',
             'content' => 'required|string|max:3000',
         ]);
@@ -210,13 +223,20 @@ class ReviewsController extends Controller
         ]);
 
         // 認証済みユーザ（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
-        $request->user()->reviews()->create([
+        $review = $request->user()->reviews()->create([
             'menu' => $request->menu,
             'satisfaction' => $request->satisfaction,
             'content' => $request->content,
             'image_url' => $path,
             'shop_id' => $shop->id,
         ]);
+        
+        if($request->tags) {
+            $tagIds = array_map('intval', $request->tags);
+            foreach($tagIds as $tagId) {
+                $review->tag($tagId);
+            }
+        }
 
         // トップページへリダイレクトさせる
         return redirect('/');
@@ -241,10 +261,21 @@ class ReviewsController extends Controller
     {
         // idの値でレビューを検索して取得
         $review = Review::findOrFail($id);
+        // このレビューについているタグのオブジェクトを取得
+        $tags = $review->tags()->get();
+        // 各オブジェクトからidを抜き出し、配列にする
+        $tagIds[] = '';
+        foreach($tags as $tag) {
+            $tagIds[] = $tag->id;
+        }
+        
+        $all_tags = Tag::all();
         
         // editビューを表示
         return view('reviews.edit', [
             'review' => $review,
+            'tagIds' => $tagIds,
+            'all_tags' => $all_tags,
         ]);
     }
     
@@ -255,6 +286,7 @@ class ReviewsController extends Controller
         $this->validate($request, [
             'menu' => 'required|string|max:255',
             'satisfaction' => '',
+            'tags' => 'array',
             'image' => 'required|file|image|mimes:jpeg,png|max:1024',
             'content' => 'required|string|max:3000',
         ]);
@@ -290,6 +322,25 @@ class ReviewsController extends Controller
         $review->content = $request->content;
         $review->image_url = $path;
         $review->save();
+        
+        // 更新前のタグを取得しidを配列にする
+        $previous_tags = $review->tags()->get();
+        $previous_tagIds[] = '';
+        foreach($previous_tags as $previous_tag) {
+            $previous_tagIds[] = $previous_tag->id;
+        }
+        // 更新前のタグを削除
+        foreach($previous_tagIds as $previous_tagId) {
+            $review->remove_tag($previous_tagId);
+        }
+        
+        // 更新後のタグを取得し保存
+        if($request->tags) {
+            $tagIds = array_map('intval', $request->tags);
+            foreach($tagIds as $tagId) {
+                $review->tag($tagId);
+            }
+        }
         
         return redirect()->route('reviews.show', ['review' => $review->id]);
     }

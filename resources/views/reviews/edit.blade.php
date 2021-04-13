@@ -19,9 +19,13 @@
                     {!! Form::text('satisfaction', $review->satisfaction, ['class' => 'kv-uni-star rating-loading', 'data-size' => 'xl']) !!}
                 </div>
                 
-                <div class="form-group">
-                    {!! Form::label('tag', 'タグ') !!}
-                    {!! Form::text('tag', $review->tag, ['class' => 'form-control']) !!}
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    @foreach($all_tags as $all_tag)
+                        <label class="btn btn-outline-danger {{ in_array($all_tag->id, $tagIds) ? "active" : '' }}">
+                            <input type="checkbox" name="tags[]" value="{{ $all_tag->id }}" {{ in_array($all_tag->id, $tagIds) ? "checked" : '' }} autocomplete="off">
+                            {{ $all_tag->content }}
+                        </label>
+                    @endforeach
                 </div>
                 
                 <div class="form-group">

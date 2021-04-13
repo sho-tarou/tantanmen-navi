@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="text-center">
-        <p>お店のレビューを入力してください</p>
+        <h2>お店のレビューを入力してください</h2>
     </div>
     
     <div class="row mb-4">
@@ -32,9 +32,14 @@
                     {!! Form::text('satisfaction', old('satisfaction'), ['class' => 'kv-uni-star rating-loading', 'data-size' => 'xl']) !!}
                 </div>
                 
-                <div class="form-group">
-                    {!! Form::label('tag', 'タグ') !!}
-                    {!! Form::text('tag', old('tag'), ['class' => 'form-control']) !!}
+                <p>タグ</p>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    @foreach($all_tags as $all_tag)
+                        <label class="btn btn-outline-danger">
+                            <input type="checkbox" name="tags[]" value="{{ $all_tag->id }}" autocomplete="off">
+                            {{ $all_tag->content }}
+                        </label>
+                    @endforeach
                 </div>
                 
                 <div class="form-group">

@@ -26,7 +26,11 @@
                 </div>
                 <div>
                     {{-- タグ --}}
-                    <p>tag</p>
+                    @if (count($review->tags) > 0)
+                        @foreach ($review->tags as $review->tag)
+                            <span class="badge badge-danger">{{ $review->tag->content }}</span>
+                        @endforeach
+                    @endif
                 </div>
             </div>
         @endforeach

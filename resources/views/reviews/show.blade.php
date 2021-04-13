@@ -49,7 +49,13 @@
                 </tr>
                 <tr>
                     <th>タグ</th>
-                    <td>tag</td>
+                    <td>
+                        @if (count($tags) > 0)
+                            @foreach ($tags as $tag)
+                                <span class="badge badge-danger">{{ $tag->content }}</span>
+                            @endforeach
+                        @endif
+                    </td>
                 </tr>
                 <tr>
                     <th>コメント</th>
