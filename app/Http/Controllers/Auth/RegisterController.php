@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Storage;  //追記
 use Intervention\Image\Facades\Image;  //追記
 use Illuminate\Http\File; //追記
 use Carbon\Carbon; //追記
+use Illuminate\Http\Request;  //追記
+use Illuminate\Auth\Events\Registered;  //追記
+
 
 class RegisterController extends Controller
 {
@@ -70,7 +73,9 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        if ($data['image']) {
+        $path = null;
+        
+        if (isset($data['image'])) {
             // 一時ファイル（$tmpFile）を生成し、そのパス（$tmpPath）を取得
             $now = date_format(Carbon::now(), 'YmdHis');
             $name = $data['image']->getClientOriginalName();
@@ -96,5 +101,19 @@ class RegisterController extends Controller
             'password' => Hash::make($data['password']),
             'image_url' => $path,
         ]);
+    }
+    
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+    
+        event(new Registered($user = $this->create($request->all())));
+    
+        $this->guard()->login($user);
+    
+        session()->flash('register_user', 'ユーザー登録が完了しました');
+    
+        return $this->registered($request, $user)
+                        ?: redirect($this->redirectPath());
     }
 }

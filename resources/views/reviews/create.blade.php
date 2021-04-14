@@ -2,9 +2,11 @@
 
 @section('content')
     <!--↓↓ 検索フォーム ↓↓-->
-    <p>レビューを投稿するお店を検索してください</p>
-    
+    <div class="text-center m-5">
+        <h3>レビューを投稿するお店を検索してください</h3>
+    </div>
     {!! Form::open(['route' => 'yahoo_api_search']) !!}
+        @csrf
         <div class="row">
             <div class="col-sm-3">
                 {!! Form::select('key_pref', $pref_index, $key_pref, ['class' => 'form-control']) !!}
@@ -21,6 +23,7 @@
     
     @if($key_pref || $keyword)
         @if($shops)
+            <p>検索結果</p>
             <div>
                 <table class="mt-4 table table-bordered table-striped">
                     @foreach($shops as $shop)
@@ -29,10 +32,10 @@
                                 <td width="20%">
                                     {{ $shop['prefecture'] }}
                                 </td>
-                                <td width="50%">
+                                <td width="60%">
                                     {{ $shop['name'] }}
                                 </td>
-                                <td width="30%">
+                                <td width="20%">
                                     @if (Auth::check())
                                         {!! Form::open(['route' => 'reviews.create_form']) !!}
                                             @csrf
@@ -42,7 +45,7 @@
                                             @endforeach
                                             
                                             {{-- レビュー入力ページへのリンク --}}
-                                            {!! Form::submit('このお店のレビューを入力する', ['class' => 'btn btn-warning btn-block']) !!}
+                                            {!! Form::submit('このお店をレビュー', ['class' => 'btn btn-warning btn-block btn-sm']) !!}
                                         {!! Form::close() !!}
                                     @endif
                                 </td>

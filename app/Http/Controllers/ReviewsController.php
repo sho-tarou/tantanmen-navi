@@ -239,6 +239,7 @@ class ReviewsController extends Controller
         }
 
         // トップページへリダイレクトさせる
+        Session::flash('created_review', 'レビューを投稿できました。');
         return redirect('/');
     }
     
@@ -342,6 +343,7 @@ class ReviewsController extends Controller
             }
         }
         
+        Session::flash('updated_review', 'レビューを更新しました。');
         return redirect()->route('reviews.show', ['review' => $review->id]);
     }
     

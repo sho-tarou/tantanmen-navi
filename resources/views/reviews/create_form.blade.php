@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="text-center">
-        <h2>お店のレビューを入力してください</h2>
+    <div class="text-center m-5">
+        <h3>お店のレビューを入力してください</h3>
     </div>
     
     <div class="row mb-4">
@@ -23,16 +23,18 @@
                 </div>
                 
                 <div class="form-group">
+                    <span class="badge badge-danger">必須</span>
                     {!! Form::label('menu', 'メニュー名') !!}
-                    {!! Form::text('menu', old('menu'), ['class' => 'form-control']) !!}
+                    {!! Form::text('menu', old('menu'), ['class' => 'form-control', 'required']) !!}
                 </div>
                 
                 <div class="form-group">
+                    <span class="badge badge-danger">必須</span>
                     {!! Form::label('satisfaction', '満足度') !!}
                     {!! Form::text('satisfaction', old('satisfaction'), ['class' => 'kv-uni-star rating-loading', 'data-size' => 'xl']) !!}
                 </div>
                 
-                <p>タグ</p>
+                <p>タグ（複数可）</p>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     @foreach($all_tags as $all_tag)
                         <label class="btn btn-outline-danger">
@@ -42,14 +44,16 @@
                     @endforeach
                 </div>
                 
-                <div class="form-group">
-                    {!! Form::label('image', '画像ファイル') !!}
-                    {!! Form::file('image', ['class' => 'form-control']) !!}
+                <div class="form-group mt-4">
+                    <span class="badge badge-danger">必須</span>
+                    {!! Form::label('image', '写真（1MBまで）') !!}
+                    {!! Form::file('image', ['class' => 'form-control-file', 'required']) !!}
                 </div>
                 
                 <div class="form-group">
+                    <span class="badge badge-danger">必須</span>
                     {!! Form::label('content', 'コメント') !!}
-                    {!! Form::textarea('content', old('content'), ['class' => 'form-control', 'placeholder' => 'レビューを記入してください', 'rows' => '5']) !!}
+                    {!! Form::textarea('content', old('content'), ['class' => 'form-control', 'placeholder' => 'レビューを記入してください', 'rows' => '5', 'required']) !!}
                 </div>
                 
                 {!! Form::submit('投稿する', ['class' => 'btn btn-warning btn-block']) !!}

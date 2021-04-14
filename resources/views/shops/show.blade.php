@@ -2,7 +2,9 @@
 
 @section('content')
     <div>
-        <h2>店舗情報</h2>
+        <div class="text-center m-5">
+            <h3>店舗情報</h3>
+        </div>
         <table class="mt-4 table table-bordered table-striped">
             <tbody>
                 <tr>
@@ -57,7 +59,7 @@
     </div>
     <div>
         <p>このお店のレビュー</p>
-        <div style="margin: 0px; border: 1px solid #333333;">
+        <div>
             {{-- 投稿一覧 --}}
             @include('reviews.reviews')
         </div>

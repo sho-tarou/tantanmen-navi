@@ -1,7 +1,7 @@
 @if (count($users) > 0)
-    <ul class="list-unstyled list-inline">
+    <div class="row">
         @foreach ($users as $user)
-            <li class="list-inline-item">
+            <div  class="mt-3 col-sm-6 col-lg-3">
                 {{-- 写真 --}}
                 <div>
                     @if ($user->image_url == null)
@@ -16,7 +16,7 @@
                     {{-- ユーザ詳細ページへのリンク --}}
                     <p>{!! link_to_route('users.show', $user->name, ['user' => $user->id]) !!}</p>
                 </div>
-            </li>
+            </div>
         @endforeach
-    </ul>
+    </div>
 @endif

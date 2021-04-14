@@ -1,7 +1,7 @@
 @if (count($reviews) > 0)
     <div class="row">
         @foreach ($reviews as $review)
-            <div  class="col-sm-6 col-lg-3">
+            <div  class="mt-1 col-sm-6 col-lg-3">
                 <div>
                     <div>
                         {{-- 投稿者のユーザ詳細ページへのリンク --}}
@@ -36,5 +36,7 @@
         @endforeach
     </div>
     {{-- ページネーションのリンク --}}
-    {{ $reviews->links() }}
+    <div class="d-flex justify-content-center mt-3">
+        {{ $reviews->links() }}
+    </div>
 @endif

@@ -40,25 +40,19 @@
         {{-- ナビゲーションバー --}}
         @include('commons.navbar')
         
-        <div id="wrapper">
+        <div id="wrapper" style="min-height: 100vh">
             <div class="container">
                 {{-- エラーメッセージ --}}
                 @include('commons.error_messages')
-                {{-- ユーザー登録削除後のメッセージ --}}
-                @if(Session::has('deleted_user'))
-                    <p class="bg-danger">{{session('deleted_user')}}</p>
-                @endif
-                {{-- 投稿削除後のメッセージ --}}
-                @if(Session::has('deleted_review'))
-                    <p class="bg-danger">{{session('deleted_review')}}</p>
-                @endif
+                {{-- 各動作実行後のセッションメッセージ --}}
+                @include('commons.session_messages')
                 
                 @yield('content')
             </div>
         </div>
         
-        <footer class="text-center" style="background-color:#e93f02;">
-            <small>&copy; SHOMA ITEZONO</small>
+        <footer class="text-center mt-auto" style="background-color:#e93f02;">
+            <small>&copy; 担々麺ナビ</small>
         </footer>
     </body>
 </html>

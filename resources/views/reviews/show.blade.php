@@ -1,8 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="text-center m-5">
+        <h3>レビュー詳細</h3>
+    </div>
     <div class="row">
-        <div class="col-sm-9">
+        <div class="col-sm-5">
             <div>
                 {{-- 投稿者のユーザ詳細ページへのリンク --}}
                 {!! link_to_route('users.show', $review->user->name, ['user' => $review->user->id]) !!}
@@ -12,7 +15,7 @@
                 {!! link_to_route('shops.show', $review->shop->name, ['shop' => $review->shop->id]) !!}
             </div>
         </div>
-        <div class="col-sm-3 text-right">
+        <div class="col-sm-7 text-right">
             @if (Auth::check())
                 @if (Auth::id() == $review->user->id)
                     {{-- 投稿編集ページへのリンク --}}
@@ -32,7 +35,9 @@
                 <img class="img-thumbnail img-fluid mx-auto d-block" src="https://tantanmen-navi.s3-ap-northeast-1.amazonaws.com/{{ $review->image_url }}" alt="tantanmen image">
             @endif
             {{-- お気に入りボタン --}}
-            @include('favorite.favorite_button')
+            <div class="mt-1">
+                @include('favorite.favorite_button')
+            </div>
         </div>
         <div class="col-sm-7">
             <table class="table table-borderless">

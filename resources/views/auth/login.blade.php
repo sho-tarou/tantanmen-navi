@@ -1,14 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="text-center">
-        <h1>ログイン</h1>
+    <div class="text-center m-5">
+        <h3>ログイン</h3>
     </div>
     
     <div class="row">
         <div class="col-sm-6 offset-sm-3">
             
             {!! Form::open(['route' => 'login.post']) !!}
+                @csrf
                 <div class="form-group">
                     {!! Form::label('email', 'メールアドレス') !!}
                     {!! Form::email('email', old('email'), ['class' => 'form-control']) !!}
@@ -19,11 +20,13 @@
                     {!! Form::password('password', ['class' => 'form-control']) !!}
                 </div>
                 
-                {!! Form::submit('ログイン', ['class' => 'btn btn-success btn-block']) !!}
+                {!! Form::submit('ログイン', ['class' => 'btn btn-success mx-auto d-block']) !!}
             {!! Form::close() !!}
             
-            {{-- ユーザ登録ページへのリンク --}}
-            {!! link_to_route('signup.get', 'ユーザー登録はこちらへ') !!}
+            <div class="text-right">
+                {{-- ユーザ登録ページへのリンク --}}
+                {!! link_to_route('signup.get', 'ユーザー登録はこちらへ') !!}
+            </div>
         </div>
     </div>
 @endsection
