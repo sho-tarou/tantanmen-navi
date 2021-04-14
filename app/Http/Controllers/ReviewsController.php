@@ -183,23 +183,19 @@ class ReviewsController extends Controller
         ]);
         
         if ($request->image) {
-            // 一時ファイル（$tmpFile）を生成し、そのパス（$tmpPath）を取得
+            // パスを生成
             $now = date_format(Carbon::now(), 'YmdHis');
             $name = $request->image->getClientOriginalName();
-            $tmpFile = $now . '_' . $name;
-            $tmpPath = storage_path('app/tmp/') . $tmpFile;
+            $path = 'tantanmen/' . $now . '_' . $name;
             
             // 画像中央を縦横1:1の比率で切り抜き、縦幅・横幅350pxへリサイズ
             $image = Image::make($request->image)
                 ->fit(350, 350, function($constraint){
                     $constraint->upsize(); // 元画像より大きくなるのを防止
-                })->save($tmpPath);
+                })->stream();
             
-            // s3のtantanmenファイルに追加し、ファイルパスを取得
-            $path = Storage::disk('s3')->putFile('/tantanmen', new File($tmpPath), 'public');
-            
-            // 一時ファイルを削除
-            Storage::disk('local')->delete('tmp/' . $tmpFile);
+            // s3のprofileファイルに追加
+            Storage::disk('s3')->put($path, $image->__toString(), 'public');
         }
         
         $shop = Shop::updateOrCreate(['yahoo_api_id' => $request->yahoo_api_id],[
@@ -293,11 +289,10 @@ class ReviewsController extends Controller
         ]);
         
         if ($request->file('image')) {
-            // 一時ファイル（$tmpFile）を生成し、そのパス（$tmpPath）を取得
+            // パスを生成
             $now = date_format(Carbon::now(), 'YmdHis');
             $name = $request->file('image')->getClientOriginalName();
-            $tmpFile = $now . '_' . $name;
-            $tmpPath = storage_path('app/tmp/') . $tmpFile;
+            $path = 'tantanmen/' . $now . '_' . $name;
             
             // 更新前の画像のS3パスを取得
             $previousPath = $review->image_url;
@@ -306,13 +301,10 @@ class ReviewsController extends Controller
             $image = Image::make($request->file('image'))
                 ->fit(350, 350, function($constraint){
                     $constraint->upsize(); // 元画像より大きくなるのを防止
-                })->save($tmpPath);
+                })->stream();
             
-            // s3のprofileファイルに追加し、ファイルパスを取得
-            $path = Storage::disk('s3')->putFile('/tantanmen', new File($tmpPath), 'public');
-            
-            // 一時ファイルを削除
-            Storage::disk('local')->delete('tmp/' . $tmpFile);
+            // s3のprofileファイルに追加
+            Storage::disk('s3')->put($path, $image->__toString(), 'public');
             
             // 更新前の画像をS3から削除
             Storage::disk('s3')->delete($previousPath);

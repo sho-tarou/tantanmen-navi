@@ -76,23 +76,19 @@ class RegisterController extends Controller
         $path = null;
         
         if (isset($data['image'])) {
-            // 一時ファイル（$tmpFile）を生成し、そのパス（$tmpPath）を取得
+            // パスを生成
             $now = date_format(Carbon::now(), 'YmdHis');
             $name = $data['image']->getClientOriginalName();
-            $tmpFile = $now . '_' . $name;
-            $tmpPath = storage_path('app/tmp/') . $tmpFile;
+            $path = 'profile/' . $now . '_' . $name;
             
             // 画像中央を縦横1:1の比率で切り抜き、縦幅・横幅350pxへリサイズ
             $image = Image::make($data['image'])
                 ->fit(350, 350, function($constraint){
                     $constraint->upsize(); // 元画像より大きくなるのを防止
-                })->save($tmpPath);
+            })->stream();
             
-            // s3のprofileファイルに追加し、ファイルパスを取得
-            $path = Storage::disk('s3')->putFile('/profile', new File($tmpPath), 'public');
-            
-            // 一時ファイルを削除
-            Storage::disk('local')->delete('tmp/' . $tmpFile);
+            // s3のprofileファイルに追加
+            Storage::disk('s3')->put($path, $image->__toString(), 'public');
         }
         
         return User::create([
