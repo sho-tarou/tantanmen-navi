@@ -322,9 +322,13 @@ class ReviewsController extends Controller
         foreach($previous_tags as $previous_tag) {
             $previous_tagIds[] = $previous_tag->id;
         }
-        // 更新前のタグを削除
-        foreach($previous_tagIds as $previous_tagId) {
-            $review->remove_tag($previous_tagId);
+        
+        if($previous_tagIds) {
+            $previous_int_tagIds = array_map('intval', $previous_tagIds);
+            // 更新前のタグを削除
+            foreach($previous_int_tagIds as $previous_int_tagId) {
+                $review->remove_tag($previous_int_tagId);
+            }
         }
         
         // 更新後のタグを取得し保存
