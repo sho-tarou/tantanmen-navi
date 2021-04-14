@@ -67,7 +67,7 @@
                     <td></td>
                 </tr>
                 <tr>
-                    <td colspan="2" class="border">{{ $review->content }}</td>
+                    <td colspan="2" class="border"  style="white-space:pre-wrap;">{{ $review->content }}</td>
                 </tr>
             </tbody>
         </table>

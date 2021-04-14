@@ -35,7 +35,7 @@
                 </div>
                 
                 <p>タグ（複数可）</p>
-                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons" style="display: grid; gap: 2px; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));">
                     @foreach($all_tags as $all_tag)
                         <label class="btn btn-outline-danger">
                             <input type="checkbox" name="tags[]" value="{{ $all_tag->id }}" autocomplete="off">
