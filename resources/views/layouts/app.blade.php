@@ -7,6 +7,7 @@
         
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
         {{-- star ratingのcss --}}
+        <link rel="stylesheet" href="/css/app.css" type="text/css"/>
         <link rel="stylesheet" href="/css/star-rating.css" media="all" type="text/css"/>
         <link rel="stylesheet" href="/css/themes/krajee-uni/theme.css" media="all" type="text/css"/>
         

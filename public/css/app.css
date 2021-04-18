@@ -1,0 +1,12 @@
+#wrapper{
+    color:#472614;
+}
+
+a{
+    color:#e65100;
+    text-decoration:none;
+}
+
+a:hover{
+    color:#b44102;
+}
