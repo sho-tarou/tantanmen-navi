@@ -19,8 +19,8 @@
         <script src="/js/star-rating.js" type="text/javascript"></script>
         <script src="/js/themes/krajee-uni/theme.js" type="text/javascript"></script>
         
-        {{-- star ratingのjavascript --}}
         <script>
+            {{-- star rating --}}
             /*global $*/
             $(document).on('ready', function () {
                 $('.kv-uni-star').rating({
@@ -33,6 +33,16 @@
                             console.log('Rating selected: ' + $(this).val());
                         });
             });
+            
+            {{-- 画像プレビュー --}}
+            function previewImage(obj)
+            {
+            	var fileReader = new FileReader();
+            	fileReader.onload = (function() {
+            		document.getElementById('preview').src = fileReader.result;
+            	});
+            	fileReader.readAsDataURL(obj.files[0]);
+            }
         </script>
     </head>
     

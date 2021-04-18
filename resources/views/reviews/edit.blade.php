@@ -35,8 +35,12 @@
                 <div class="form-group mt-4">
                     <span class="badge badge-danger">必須</span>
                     {!! Form::label('image', '写真（1MBまで）') !!}
-                    {!! Form::file('image', ['class' => 'form-control-file', 'required']) !!}
+                    {!! Form::file('image', ['class' => 'form-control-file', 'onchange' => 'previewImage(this)']) !!}
                 </div>
+                <p>
+                画像プレビュー：<br>
+                <img id="preview" src="https://tantanmen-navi.s3-ap-northeast-1.amazonaws.com/{{ $review->image_url }}" style="max-width:200px;">
+                </p>
                 
                 <div class="form-group">
                     <span class="badge badge-danger">必須</span>

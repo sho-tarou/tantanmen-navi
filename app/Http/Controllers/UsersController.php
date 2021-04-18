@@ -76,9 +76,10 @@ class UsersController extends Controller
             
             // 更新前の画像をS3から削除
             Storage::disk('s3')->delete($previousPath);
-        }else{
-            $path = null;
             
+            $user->image_url = $path;
+            
+        }else{
             // 更新前の画像のS3パスを取得
             $previousPath = $user->image_url;
             // 更新前の画像をS3から削除
@@ -88,7 +89,7 @@ class UsersController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->image_url = $path;
+        
         $user->save();
         
         Session::flash('updated_user', 'ユーザー情報を更新しました。');

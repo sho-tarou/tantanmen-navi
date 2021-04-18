@@ -36,8 +36,12 @@
                 
                 <div class="form-group">
                     {!! Form::label('image', 'プロフィール写真（1MBまで）') !!}
-                    {!! Form::file('image', ['class' => 'form-control-file']) !!}
+                    {!! Form::file('image', ['class' => 'form-control-file', 'onchange' => 'previewImage(this)']) !!}
                 </div>
+                <p>
+                画像プレビュー：<br>
+                <img id="preview" src="https://tantanmen-navi.s3-ap-northeast-1.amazonaws.com/{{ $user->image_url }}" style="max-width:200px;">
+                </p>
                 
                 {!! Form::submit('この内容で更新する', ['class' => 'btn btn-success mx-auto d-block']) !!}
             {!! Form::close() !!}

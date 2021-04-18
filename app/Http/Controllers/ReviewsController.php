@@ -284,7 +284,7 @@ class ReviewsController extends Controller
             'menu' => 'required|string|max:255',
             'satisfaction' => '',
             'tags' => 'array',
-            'image' => 'required|file|image|mimes:jpeg,png|max:1024',
+            'image' => 'file|image|mimes:jpeg,png|max:1024',
             'content' => 'required|string|max:3000',
         ]);
         
@@ -303,17 +303,19 @@ class ReviewsController extends Controller
                     $constraint->upsize(); // 元画像より大きくなるのを防止
                 })->stream();
             
-            // s3のprofileファイルに追加
+            // s3のtantanmenファイルに追加
             Storage::disk('s3')->put($path, $image->__toString(), 'public');
             
             // 更新前の画像をS3から削除
             Storage::disk('s3')->delete($previousPath);
+            
+            $review->image_url = $path;
         }
         
         $review->menu = $request->menu;
         $review->satisfaction = $request->satisfaction;
         $review->content = $request->content;
-        $review->image_url = $path;
+        
         $review->save();
         
         // 更新前のタグを取得しidを配列にする
