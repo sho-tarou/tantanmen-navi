@@ -57,7 +57,7 @@
                     <td>
                         @if (count($tags) > 0)
                             @foreach ($tags as $tag)
-                                <span class="badge badge-danger">{{ $tag->content }}</span>
+                                <span class="badge badge-danger tags">{!! link_to_route('search.search', $tag->content, ['tags[]' => $tag->id]) !!}</span>
                             @endforeach
                         @endif
                     </td>

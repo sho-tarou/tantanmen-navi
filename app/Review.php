@@ -106,6 +106,9 @@ class Review extends Model
     {
         $prefecture = $request->input('prefecture');
         $keywords = $request->input('keyword');
+        if($request->tags) {
+            $tagIds = array_map('intval', $request->tags);
+        }
         $satisfaction = floatval($request->input('satisfaction'));
         
         // 店舗情報による絞り込み
@@ -116,6 +119,15 @@ class Review extends Model
         // 満足度で絞り込み
         if ($satisfaction != null) {
             $query->where('satisfaction', '>=', $satisfaction);
+        }
+        
+        // タグで絞り込み
+        if(!empty($tagIds)) {
+            foreach($tagIds as $tagId) {
+                $query->whereHas('tags', function($query) use ($tagId) {
+                    $query->where('tags.id', $tagId);
+                });
+            }
         }
         
         // キーワード検索

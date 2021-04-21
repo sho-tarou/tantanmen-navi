@@ -378,6 +378,13 @@ class ReviewsController extends Controller
             $keyword = $request->keyword;
         }
         
+        if($request->tags) {
+            $tagIds = array_map('intval', $request->tags);
+        }else{
+            $tagIds = [];
+        }
+        $all_tags = Tag::all();
+        
         return view('search.search')->with([
             'reviews' => $reviews,
             'pref_index' => $pref_index,
@@ -385,6 +392,8 @@ class ReviewsController extends Controller
             'satisfaction' => $request->satisfaction,
             'shop_pref' => $request->shop_pref,
             'shop_name' => $request->shop_name,
+            'all_tags' => $all_tags,
+            'tagIds' => $tagIds,
         ]);
     }
 }

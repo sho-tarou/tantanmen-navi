@@ -29,11 +29,11 @@
                         </div>
                     @endif
                 </div>
-                <div>
+                <div class="tags">
                     {{-- タグ --}}
                     @if (count($review->tags) > 0)
                         @foreach ($review->tags as $review->tag)
-                            <span class="badge badge-danger">{{ $review->tag->content }}</span>
+                            <span class="badge badge-danger">{!! link_to_route('search.search', $review->tag->content, ['tags[]' => $review->tag->id]) !!}</span>
                         @endforeach
                     @endif
                 </div>

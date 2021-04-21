@@ -18,12 +18,26 @@
                 <input type="text" name="keyword" value="{{ $keyword }}" class="form-control" placeholder="キーワード（複数入力するときは間にスペースを入れてください）">
             </div>
             
-            <div class="col-12 row mt-2">
+            <div class="col-12 row mt-3">
                 {!! Form::label('satisfaction', '満足度：', ['class' => 'col-12 col-sm-4 col-md-2 mt-2']) !!}
                 <span class="ml-3">
                     {!! Form::text('satisfaction', $satisfaction, ['class' => 'kv-uni-star rating-loading col-12 col-sm-8 col-md-10', 'data-size' => 'sm']) !!}
                 </span>
                 <span class="mt-2">以上</span>
+            </div>
+            
+            <div class="col-12 row mt-3">
+                <p class="pl-3 col-12 col-sm-4 col-md-2">タグ（複数可）</p>
+                <div class=" col-12 col-sm-8 col-md-10">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons" style="display: grid; gap: 2px; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));">
+                        @foreach($all_tags as $all_tag)
+                            <label class="btn btn-outline-danger btn-sm {{ in_array($all_tag->id, $tagIds) ? "active" : '' }}">
+                                <input type="checkbox" name="tags[]" value="{{ $all_tag->id }}" {{ in_array($all_tag->id, $tagIds) ? "checked" : '' }} autocomplete="off">
+                                {{ $all_tag->content }}
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
             </div>
             
             <div class="offset-4 col-4 offset-md-5 col-md-2 mt-3">
