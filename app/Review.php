@@ -106,10 +106,16 @@ class Review extends Model
     {
         $prefecture = $request->input('prefecture');
         $keywords = $request->input('keyword');
+        $satisfaction = floatval($request->input('satisfaction'));
         
         // 店舗情報による絞り込み
         if ($prefecture != '全国' && !empty($shop_ids)) {
             $query->whereIn('shop_id', $shop_ids);
+        }
+        
+        // 満足度で絞り込み
+        if ($satisfaction != null) {
+            $query->where('satisfaction', '>=', $satisfaction);
         }
         
         // キーワード検索

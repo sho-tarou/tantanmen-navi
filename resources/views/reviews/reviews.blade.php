@@ -19,9 +19,14 @@
                         </a>
                     @else
                         {{-- 担々麺の写真（リンク）を表示 --}}
-                        <a href="{{ route('reviews.show', $review->id) }}">
-                            <img class="img-thumbnail img-fluid mx-auto d-block" src="https://tantanmen-navi.s3-ap-northeast-1.amazonaws.com/{{ $review->image_url }}" alt="tantanmen image">
-                        </a>
+                        <div class="review-image">
+                            <a href="{{ route('reviews.show', $review->id) }}">
+                                <img class="img-thumbnail img-fluid mx-auto d-block" src="https://tantanmen-navi.s3-ap-northeast-1.amazonaws.com/{{ $review->image_url }}" alt="tantanmen image">
+                                <div class="review-satisfaction">
+                                    <input id="satisfaction" name="satisfaction" value="{{ $review->satisfaction }}" class="kv-uni-star rating-loading" data-readonly="true" data-show-clear="false" data-show-caption="false" data-size="sm">
+                                </div>
+                            </a>
+                        </div>
                     @endif
                 </div>
                 <div>

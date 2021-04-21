@@ -17,6 +17,15 @@
             <div class="col-12 col-md-7">
                 <input type="text" name="keyword" value="{{ $keyword }}" class="form-control" placeholder="キーワード（複数入力するときは間にスペースを入れてください）">
             </div>
+            
+            <div class="col-12 row mt-2">
+                {!! Form::label('satisfaction', '満足度：', ['class' => 'col-12 col-sm-4 col-md-2 mt-2']) !!}
+                <span class="ml-3">
+                    {!! Form::text('satisfaction', $satisfaction, ['class' => 'kv-uni-star rating-loading col-12 col-sm-8 col-md-10', 'data-size' => 'sm']) !!}
+                </span>
+                <span class="mt-2">以上</span>
+            </div>
+            
             <div class="offset-4 col-4 offset-md-5 col-md-2 mt-3">
                 <input type="submit" value="検索" class="btn btn-info btn-block">
             </div>

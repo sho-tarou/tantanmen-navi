@@ -382,6 +382,7 @@ class ReviewsController extends Controller
             'reviews' => $reviews,
             'pref_index' => $pref_index,
             'keyword' => $keyword,
+            'satisfaction' => $request->satisfaction,
             'shop_pref' => $request->shop_pref,
             'shop_name' => $request->shop_name,
         ]);

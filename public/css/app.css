@@ -10,3 +10,13 @@ a{
 a:hover{
     color:#b44102;
 }
+
+.review-image {/*親div*/
+  position: relative;/*相対配置*/
+  }
+
+.review-satisfaction {
+  position: absolute;/*絶対配置*/
+  top: 0;
+  left: 0;
+  }
